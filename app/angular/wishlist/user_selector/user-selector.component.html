@@ -1,0 +1,10 @@
+<button
+        *ngFor="let user of userList"
+        [innerText]="user.firstName"
+        (click)="selectUser({user: user})"></button>
+
+<div>
+    <span [innerText]="userSelected.firstName"></span>
+    <span [innerText]="userSelected.lastName"></span>
+    <span [innerText]="userSelected.email"></span>
+</div>
