@@ -8,19 +8,8 @@ import '@angular/core';
 import '@angular/common';
 import '@angular/http';
 
-import './legacy-app';
+import {bootstrap} from '@angular/platform-browser-dynamic';
 
-import {upgradeAdapter} from './upgrade-adapter';
+import {WishlistComponent} from './wishlist/wishlist.component';
 
-
-/* Bootstrapping AngularJS. */
-import {WtApp} from './app/app.component';
-
-const ngApp = require('./app/ng-module-app');
-ngApp.directive('wtApp', upgradeAdapter.downgradeNg2Component(WtApp));
-
-upgradeAdapter.bootstrap(document.body.parentElement, ['app']);
-
-/*
- * @todo: Call `bootstrap(LzApp)` once we get rid of AngularJS 1.
- */
+bootstrap(WishlistComponent);
