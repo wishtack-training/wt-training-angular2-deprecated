@@ -5,12 +5,12 @@
  * $Id: $
  */
 
-import {ChangeDetectionStrategy, Component} from '@angular/core';
-import * as Immutable from 'immutable';
+import {ChangeDetectionStrategy, Component, OnInit, ChangeDetectorRef} from '@angular/core';
 
 import {User} from '../user/user';
 import {UserDisplayComponent} from '../user_display/user-display.component';
 import {UserEditComponent} from '../user_edit/user-edit';
+import {UserResourceHelper} from '../user/user-resource-helper';
 
 
 @Component({
@@ -22,13 +22,15 @@ import {UserEditComponent} from '../user_edit/user-edit';
     selector: 'wt-user-list',
     templateUrl: require('./user-list.component.html')
 })
-export class UserListComponent {
+export class UserListComponent implements OnInit {
 
     static PROVIDERS = [
         UserDisplayComponent.PROVIDERS,
-        UserEditComponent.PROVIDERS
+        UserEditComponent.PROVIDERS,
+        UserResourceHelper.PROVIDERS
     ];
 
+    formDisabled: boolean = false;
     editedUser: User = null;
 
     userList: User[] = [
@@ -44,30 +46,75 @@ export class UserListComponent {
         })
     ];
 
+    constructor(
+        private _changeDetector: ChangeDetectorRef,
+        private _userResourceHelper: UserResourceHelper
+    ) {
+    }
+
+    ngOnInit() {
+        this._userResourceHelper.list()
+            .subscribe(userList => {
+
+                this.userList = userList;
+
+                this._changeDetector.markForCheck();
+
+            });
+    }
+
     editUser({user}: {user: User}) {
         this.editedUser = user;
     }
 
     onUserChange({user}: {user: User}) {
 
-        let foundUser = this.userList.find(u => u.id === user.id);
+        this.formDisabled = true;
 
-        /* Update user if it's in the list. */
-        if (foundUser != null) {
-            this.userList = this.userList.map(u => (u.id === user.id) ? user : u);
-        }
+        this._userResourceHelper.save({user: user})
+            .finally(() => {
 
-        /* Add user if it's a new user. */
-        else {
-            this.userList.push(user);
-        }
+                this.formDisabled = false;
 
-        this.editedUser = null;
+                /* Marking for check. */
+                this._changeDetector.markForCheck();
+
+            })
+            .subscribe(
+                (user: User) => {
+
+                    let foundUser = this.userList.find(u => u.id === user.id);
+
+                    /* Update user if it's in the list. */
+                    if (foundUser != null) {
+                        this.userList = this.userList.map(u => (u.id === user.id) ? user : u);
+                    }
+
+                    /* Add user if it's a new user. */
+                    else {
+                        this.userList.push(user);
+                    }
+
+                    this.editedUser = null;
+
+                }
+            );
 
     }
 
     removeUser({user}: {user: User}) {
-        this.userList = this.userList.filter(u => u !== user);
+
+        this._userResourceHelper.delete({user: user})
+            .subscribe(() => {
+
+                /* Removing user from list. */
+                this.userList = this.userList.filter(u => u !== user);
+
+                /* Marking for check. */
+                this._changeDetector.markForCheck();
+
+            });
+
     }
 
 }

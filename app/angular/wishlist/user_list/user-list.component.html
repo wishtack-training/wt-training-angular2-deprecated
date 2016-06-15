@@ -1,4 +1,7 @@
-<wt-user-edit [user]="editedUser" (userChange)="onUserChange({user: $event})"></wt-user-edit>
+<wt-user-edit
+        [disabled]="formDisabled"
+        [user]="editedUser"
+        (userChange)="onUserChange({user: $event})"></wt-user-edit>
 
 <div *ngFor="let user of userList; trackBy:user?.id">
 

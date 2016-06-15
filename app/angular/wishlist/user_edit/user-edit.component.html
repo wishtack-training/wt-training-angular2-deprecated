@@ -2,18 +2,21 @@
 
     <input
             [ngFormControl]="firstNameControl"
+            [disabled]="disabled"
             type="text">
 
     <input
             [ngFormControl]="lastNameControl"
+            [disabled]="disabled"
             type="text">
 
     <input
             [ngFormControl]="emailControl"
+            [disabled]="disabled"
             type="text">
 
     <button
-            [disabled]="!userControlGroup.valid"
+            [disabled]="disabled || !userControlGroup.valid"
             type="submit">{{ user ? 'SAVE' : 'ADD' }}</button>
 
 </form>

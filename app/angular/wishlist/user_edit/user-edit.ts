@@ -19,6 +19,7 @@ import {User} from '../user/user';
 })
 export class UserEditComponent implements OnChanges {
 
+    @Input() disabled: boolean;
     @Input() user: User;
     @Output() userChange = new EventEmitter<User>();
 
@@ -36,7 +37,9 @@ export class UserEditComponent implements OnChanges {
     ngOnChanges(changes) {
 
         /* Reset form if user changed. */
-        this._buildForm({user: changes.user.currentValue});
+        if (changes.user != null) {
+            this._buildForm({user: changes.user.currentValue});
+        }
 
     }
 

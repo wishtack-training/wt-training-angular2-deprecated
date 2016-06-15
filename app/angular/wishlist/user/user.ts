@@ -6,7 +6,6 @@
  */
 
 import {Record} from 'immutable';
-import {UUID} from 'angular2-uuid';
 
 
 /* This is the list of available properties and their default values. */
@@ -27,7 +26,6 @@ export class User extends UserRecord {
     }) {
 
         args = args || {};
-        args.id = (args.id != null) ? args.id : UUID.UUID();
 
         super(args);
 
@@ -46,5 +44,8 @@ export class User extends UserRecord {
     setEmail(value: string): User { return <User>this.set('email', value); }
 
     set(key: string, value: string) { return <User>super.set(key, value); }
+
+    /* This will be overriden by `Resource`. */
+    save() {}
 
 }
