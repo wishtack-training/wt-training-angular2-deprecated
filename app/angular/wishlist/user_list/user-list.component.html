@@ -1,0 +1,17 @@
+<wt-user-edit [user]="editedUser" (userChange)="onUserChange({user: $event})"></wt-user-edit>
+
+<div *ngFor="let user of userList; trackBy:user?.id">
+
+    <wt-user-display [user]="user"></wt-user-display>
+
+    <button
+            (click)="editUser({user: user})"
+            type="button">EDIT</button>
+
+    <button
+            (click)="removeUser({user: user})"
+            type="button">REMOVE</button>
+
+</div>
+
+<wt-user-display [user]="null"></wt-user-display>

@@ -5,16 +5,46 @@
  * $Id: $
  */
 
-export class User {
+import {Record} from 'immutable';
+import {UUID} from 'angular2-uuid';
 
-    firstName: string;
-    lastName: string;
-    email: string;
 
-    constructor({firstName, lastName, email}: {firstName?: string, lastName?: string, email?: string}) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
+/* This is the list of available properties and their default values. */
+let UserRecord = Record({
+    id: null,
+    firstName: null,
+    lastName: null,
+    email: null
+});
+
+export class User extends UserRecord {
+
+    constructor(args?: {
+        id?: string,
+        firstName?: string,
+        lastName?: string,
+        email?: string
+    }) {
+
+        args = args || {};
+        args.id = (args.id != null) ? args.id : UUID.UUID();
+
+        super(args);
+
     }
+
+    get id(): string { return this.get('id'); }
+    setId(value: string): User { return this.set('id', value); }
+
+    get firstName(): string { return this.get('firstName'); }
+    setFirstName(value: string): User {return <User>this.set('firstName', value); }
+
+    get lastName(): string { return this.get('lastName'); }
+    setLastName(value: string): User { return <User>this.set('lastName', value); }
+
+    get email(): string { return this.get('email'); }
+    setEmail(value: string): User { return <User>this.set('email', value); }
+
+    set(key: string, value: string) { return <User>super.set(key, value); }
 
 }

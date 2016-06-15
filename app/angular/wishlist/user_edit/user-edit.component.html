@@ -1,0 +1,19 @@
+<form [ngFormModel]="userControlGroup" (ngSubmit)="onSubmit()" novalidate>
+
+    <input
+            [ngFormControl]="firstNameControl"
+            type="text">
+
+    <input
+            [ngFormControl]="lastNameControl"
+            type="text">
+
+    <input
+            [ngFormControl]="emailControl"
+            type="text">
+
+    <button
+            [disabled]="!userControlGroup.valid"
+            type="submit">{{ user ? 'SAVE' : 'ADD' }}</button>
+
+</form>

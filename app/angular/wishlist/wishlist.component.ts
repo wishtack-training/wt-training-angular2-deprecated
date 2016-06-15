@@ -1,13 +1,13 @@
 
 import {Component} from '@angular/core';
-import {UserSelectorComponent} from './user_selector/user-selector.component';
+import {UserListComponent} from './user_list/user-list.component';
 
 @Component({
     directives: [
-        UserSelectorComponent
+        UserListComponent
     ],
     providers: [
-        UserSelectorComponent.PROVIDERS
+        UserListComponent.PROVIDERS
     ],
     selector: 'wt-app',
     templateUrl: require('./wishlist.component.html')
