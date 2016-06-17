@@ -9,7 +9,7 @@ import {ChangeDetectionStrategy, Component, OnInit, ChangeDetectorRef} from '@an
 
 import {User} from '../user/user';
 import {UserDisplayComponent} from '../user_display/user-display.component';
-import {UserEditComponent} from '../user_edit/user-edit';
+import {UserEditComponent} from '../user_edit/user-edit.component';
 import {UserResourceHelper} from '../user/user-resource-helper';
 
 
@@ -19,16 +19,15 @@ import {UserResourceHelper} from '../user/user-resource-helper';
         UserDisplayComponent,
         UserEditComponent
     ],
+    providers: [
+        UserDisplayComponent.PROVIDERS,
+        UserEditComponent.PROVIDERS,
+        UserResourceHelper.PROVIDERS
+    ],
     selector: 'wt-user-list',
     templateUrl: require('./user-list.component.html')
 })
 export class UserListComponent implements OnInit {
-
-    static PROVIDERS = [
-        UserDisplayComponent.PROVIDERS,
-        UserEditComponent.PROVIDERS,
-        UserResourceHelper.PROVIDERS
-    ];
 
     formDisabled: boolean = false;
     editedUser: User = null;
@@ -63,11 +62,7 @@ export class UserListComponent implements OnInit {
             });
     }
 
-    editUser({user}: {user: User}) {
-        this.editedUser = user;
-    }
-
-    onUserChange({user}: {user: User}) {
+    onUserAdd({user}: {user: User}) {
 
         this.formDisabled = true;
 
@@ -83,17 +78,7 @@ export class UserListComponent implements OnInit {
             .subscribe(
                 (user: User) => {
 
-                    let foundUser = this.userList.find(u => u.id === user.id);
-
-                    /* Update user if it's in the list. */
-                    if (foundUser != null) {
-                        this.userList = this.userList.map(u => (u.id === user.id) ? user : u);
-                    }
-
-                    /* Add user if it's a new user. */
-                    else {
-                        this.userList.push(user);
-                    }
+                    this.userList.push(user);
 
                     this.editedUser = null;
 

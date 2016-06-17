@@ -13,8 +13,12 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/retryWhen';
 import 'rxjs/add/operator/timeout';
 
+import {PLATFORM_DIRECTIVES, provide} from '@angular/core';
 import {bootstrap} from '@angular/platform-browser-dynamic';
+import {ROUTER_DIRECTIVES} from '@angular/router-deprecated';
 
 import {WishlistComponent} from './wishlist/wishlist.component';
 
-bootstrap(WishlistComponent);
+bootstrap(WishlistComponent, [
+    provide(PLATFORM_DIRECTIVES, {useValue: [ROUTER_DIRECTIVES], multi: true})
+]);

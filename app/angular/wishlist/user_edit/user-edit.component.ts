@@ -28,7 +28,9 @@ export class UserEditComponent implements OnChanges {
     emailControl: Control;
     userControlGroup: ControlGroup;
 
-    static PROVIDERS = [];
+    static PROVIDERS = [
+        FormBuilder
+    ];
 
     constructor(private _formBuilder: FormBuilder) {
         this._buildForm();

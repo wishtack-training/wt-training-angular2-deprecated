@@ -31,6 +31,10 @@ export class UserResourceHelper {
         return this._resourceHelper.delete({resource: user});
     }
 
+    get({userId}: {userId: string}): Observable<User> {
+        return this._resourceHelper.get({resourceId: userId});
+    }
+
     list(): Observable<User[]> {
         return this._resourceHelper.list();
     }

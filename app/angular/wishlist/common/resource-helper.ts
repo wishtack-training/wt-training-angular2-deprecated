@@ -28,7 +28,16 @@ export class ResourceHelper {
     }
 
     delete({resource}: {resource: {id: string}}): Observable<any> {
-        return this._http.delete(this._resourcePath({resource: resource}));
+        return this._transformObservable({
+            observable: this._http.delete(this._resourcePath({resourceId: resource.id})),
+            parseJson: false
+        });
+    }
+
+    get({resourceId}: {resourceId: string}): Observable<any> {
+        return this._transformObservable({
+            observable: this._http.get(this._resourcePath({resourceId: resourceId}))
+        }).map(this._convertToObject.bind(this));
     }
 
     list(): Observable<any[]> {
@@ -52,7 +61,7 @@ export class ResourceHelper {
         };
 
         if (resource.id != null) {
-            observable = this._http.put(this._resourcePath({resource: resource}), body, options);
+            observable = this._http.put(this._resourcePath({resourceId: resource.id}), body, options);
         }
         else {
             observable = this._http.post(this._resourceListPath(), body, options);
@@ -68,25 +77,37 @@ export class ResourceHelper {
         return new (this._type)(data);
     }
 
-    private _parseResponse(response: Response): any {
+    private _parseResponse({parseJson, response}: {parseJson: boolean, response: Response}): any {
 
         if (response.status < 200 || response.status >= 300) {
             throw new Error(`Bad response status: ${response.status}`)
         }
 
-        return response.json();
+        if (parseJson) {
+            return response.json();
+        }
+        else {
+            return response;
+        }
 
     }
 
-    private _resourcePath({resource}: {resource: any}) {
-        return `${this._resourceListPath()}${resource.id}/`;
+    private _resourcePath({resourceId}: {resourceId: string}) {
+        return `${this._resourceListPath()}${resourceId}/`;
     }
 
     private _resourceListPath() {
         return `/api/v1/${this._resourceName}/`;
     }
 
-    private _transformObservable({observable}: {observable: Observable<Response>}) {
+    private _transformObservable(
+        {
+            observable,
+            parseJson=true
+        }: {
+            observable: Observable<Response>,
+            parseJson?: boolean
+        }) {
 
         return observable
             .retryWhen(errors => {
@@ -94,7 +115,11 @@ export class ResourceHelper {
                 return errors.delay(1000);
             })
             .timeout(5000, new Error('Timeout!'))
-            .map(this._parseResponse);
+            .map(response => {
+
+                return this._parseResponse({response: response, parseJson: parseJson});
+
+            });
 
     }
 
