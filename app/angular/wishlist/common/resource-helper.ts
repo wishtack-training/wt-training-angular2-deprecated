@@ -111,7 +111,6 @@ export class ResourceHelper {
 
         return observable
             .retryWhen(errors => {
-                console.log(errors);
                 return errors.delay(1000);
             })
             .timeout(5000, new Error('Timeout!'))

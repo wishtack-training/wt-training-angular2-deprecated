@@ -19,15 +19,17 @@ import {UserResourceHelper} from '../user/user-resource-helper';
         UserDisplayComponent,
         UserEditComponent
     ],
-    providers: [
-        UserDisplayComponent.PROVIDERS,
-        UserEditComponent.PROVIDERS,
-        UserResourceHelper.PROVIDERS
-    ],
+    providers: UserListComponent.PROVIDERS,
     selector: 'wt-user-list',
     templateUrl: require('./user-list.component.html')
 })
 export class UserListComponent implements OnInit {
+
+    static PROVIDERS = [
+        UserDisplayComponent.PROVIDERS,
+        UserEditComponent.PROVIDERS,
+        UserResourceHelper.PROVIDERS
+    ];
 
     formDisabled: boolean = false;
     editedUser: User = null;
@@ -75,15 +77,13 @@ export class UserListComponent implements OnInit {
                 this._changeDetector.markForCheck();
 
             })
-            .subscribe(
-                (user: User) => {
+            .subscribe((user: User) => {
 
-                    this.userList.push(user);
+                this.userList.push(user);
 
-                    this.editedUser = null;
+                this.editedUser = null;
 
-                }
-            );
+            });
 
     }
 

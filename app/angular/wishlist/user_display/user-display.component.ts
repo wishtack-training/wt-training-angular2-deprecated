@@ -15,7 +15,7 @@ import {UserNamePipe} from '../user/user-name.pipe';
     changeDetection: ChangeDetectionStrategy.OnPush,
     pipes: [UserNamePipe],
     selector: 'wt-user-display',
-    templateUrl: require('./user-display.component.html')
+    template: require('!raw-loader!./user-display.component.html')
 })
 export class UserDisplayComponent {
 

@@ -1,22 +1,26 @@
-<form [ngFormModel]="userControlGroup" (ngSubmit)="onSubmit()" novalidate>
+<form [ngFormModel]="userControlGroup" novalidate>
 
     <input
             [ngFormControl]="firstNameControl"
             [disabled]="disabled"
+            name="firstName"
             type="text">
 
     <input
             [ngFormControl]="lastNameControl"
             [disabled]="disabled"
+            name="lastName"
             type="text">
 
     <input
             [ngFormControl]="emailControl"
             [disabled]="disabled"
+            name="email"
             type="text">
 
     <button
             [disabled]="disabled || !userControlGroup.valid"
+            (click)="onSubmit()"
             type="submit">{{ user ? 'SAVE' : 'ADD' }}</button>
 
 </form>

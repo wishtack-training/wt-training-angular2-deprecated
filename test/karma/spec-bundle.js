@@ -27,7 +27,12 @@ require('@angular/platform-browser-dynamic');
 require('@angular/core');
 require('@angular/common');
 require('@angular/http');
+require('rxjs/add/operator/delay');
+require('rxjs/add/operator/finally');
 require('rxjs/add/operator/map');
+require('rxjs/add/operator/retryWhen');
+require('rxjs/add/operator/timeout');
+require('rxjs/add/operator/toPromise');
 
 require('phantomjs-polyfill');
 
